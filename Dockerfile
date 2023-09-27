@@ -44,5 +44,3 @@ RUN \
 			&& rm -rf helmfile
 
 WORKDIR /var/workspace
-
-ENTRYPOINT [ "helmfile" ]
