@@ -1,0 +1,4 @@
+include:
+  project: devops/tools/ci
+  ref: main
+  file: container-image-pipeline.yaml
