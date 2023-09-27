@@ -4,6 +4,7 @@ FROM ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}alpine
 
 ENV \
 	HELM_VERSION=v3.12.3 \
+	HELMDIFF_VERSION=3.8.0 \
 	KUBECTL_VERSION=v1.28.0 \
   HELMFILE_VERSION=v0.153.1
 
@@ -30,6 +31,9 @@ RUN \
 			--no-progress-meter \
 		&& chmod 700 get_helm.sh \
 		&& ./get_helm.sh --version ${HELM_VERSION} \
+	&& echo "Installing helm-diff plugin ${HELMDIFF_VERSION##v}" \
+    && helm plugin install https://github.com/databus23/helm-diff \
+      --version=${HELMDIFF_VERSION} \
 	&& echo "Installing helmfile version ${HELMFILE_VERSION##v}" \
 		&& mkdir -p helmfile \
 		&& curl -fL https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION/v/}_${OS_NAME}_${ARCH_NAME}.tar.gz \
