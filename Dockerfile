@@ -6,6 +6,7 @@ ENV \
 	HELM_VERSION=v3.12.3 \
 	HELMDIFF_VERSION=3.8.0 \
 	KUBECTL_VERSION=v1.28.0 \
+	KUSTOMIZE_VERSION=5.1.1 \
   HELMFILE_VERSION=v0.153.1
 
 RUN \
@@ -42,6 +43,10 @@ RUN \
 			| tar xz -C helmfile \
 		&& mv helmfile/helmfile /usr/local/bin/helmfile \
 			&& chmod +x /usr/local/bin/helmfile \
-			&& rm -rf helmfile
+			&& rm -rf helmfile \
+	&& echo "Installing kustomize version ${KUSTOMIZE_VERSION}" \
+		&& curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" \
+			| bash -s - ${KUSTOMIZE_VERSION} \
+		&& mv ./kustomize /usr/local/bin
 
 WORKDIR /var/workspace
