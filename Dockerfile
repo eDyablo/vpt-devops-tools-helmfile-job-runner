@@ -44,7 +44,7 @@ RUN \
 		&& mv helmfile/helmfile /usr/local/bin/helmfile \
 			&& chmod +x /usr/local/bin/helmfile \
 			&& rm -rf helmfile \
-	&& echo "Installing kustomize version ${KUSTOMIZE_VERSION}" \
+	&& echo "Installing kustomize version ${KUSTOMIZE_VERSION##v}" \
 		&& curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" \
 			| bash -s - ${KUSTOMIZE_VERSION} \
 		&& mv ./kustomize /usr/local/bin
