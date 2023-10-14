@@ -4,7 +4,6 @@ FROM ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}alpine
 
 ENV \
 	HELM_VERSION=v3.12.3 \
-	HELMDIFF_VERSION=3.8.0 \
 	KUBECTL_VERSION=v1.28.0 \
 	KUSTOMIZE_VERSION=5.1.1 \
   HELMFILE_VERSION=v0.153.1
@@ -17,6 +16,7 @@ RUN \
 			curl \
 			git \
 			jq \
+			openssh \
 			openssl \
 	&& OS_NAME=$(uname -o | tr '[:upper:]' '[:lower:]') \
     && ARCH_NAME=$(uname -m) \
@@ -33,9 +33,6 @@ RUN \
 			--no-progress-meter \
 		&& chmod 700 get_helm.sh \
 		&& ./get_helm.sh --version ${HELM_VERSION} \
-	&& echo "Installing helm-diff plugin ${HELMDIFF_VERSION##v}" \
-    && helm plugin install https://github.com/databus23/helm-diff \
-      --version=${HELMDIFF_VERSION} \
 	&& echo "Installing helmfile version ${HELMFILE_VERSION##v}" \
 		&& mkdir -p helmfile \
 		&& curl -fL https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION/v/}_${OS_NAME}_${ARCH_NAME}.tar.gz \
@@ -48,5 +45,14 @@ RUN \
 		&& curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" \
 			| bash -s - ${KUSTOMIZE_VERSION} \
 		&& mv ./kustomize /usr/local/bin
+
+ARG CONTAINER_USER=default
+
+RUN addgroup -S ${CONTAINER_USER#*:} \
+  && adduser -S ${CONTAINER_USER%:*} -G ${CONTAINER_USER#*:}
+
+USER $CONTAINER_USER
+
+RUN helmfile init --force
 
 WORKDIR /var/workspace
