@@ -1,0 +1,7 @@
+services:
+  runner:
+    build:
+      context: .
+    image: dkr.gtl.net/dkr/devops-tools-helmfile-job-runner
+    volumes:
+    - .:/var/workspace:rw
