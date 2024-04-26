@@ -1,3 +1,6 @@
 include:
 - file: container-image/pipeline.gitlab-ci.yml
   project: devops/tools/ci
+
+variables:
+  CONTAINER_IMAGE_REGISTRY_PRODUCTION: $CONTAINER_IMAGE_REGISTRY_REGULAR
