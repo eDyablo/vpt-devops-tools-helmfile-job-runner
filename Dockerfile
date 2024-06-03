@@ -48,12 +48,6 @@ RUN \
       | bash -s - ${KUSTOMIZE_VERSION} \
     && mv ./kustomize /usr/local/bin
 
-RUN \
-  echo | openssl s_client -showcerts -servername charts.bitnami.com \
-    -connect charts.bitnami.com:443 2>/dev/null | openssl x509 -outform PEM \
-    > /usr/local/share/ca-certificates/charts-bitnami-com.pem \
-  && update-ca-certificates
-
 ARG CONTAINER_USER=default
 ARG CONTAINER_USER_GROUP=default
 
